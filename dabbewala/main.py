@@ -1,7 +1,28 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from database import create_tables
 
-app = FastAPI()
+from routes.orders import router as order_router
+from routes.stats import router as stats_router
 
-@app.get("/")
-def root():
-    return {"message": " Welcome home"}
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_tables()
+    print("database tables created")
+    yield
+    print("Application shutdown")
+
+app = FastAPI(
+    title  = "Dabbewala Delivery API",
+    description="API for managing dabbewala deliveries and tracking order status",
+    version="1.0.0",
+    lifespan= lifespan
+)    
+
+app.include_router(order_router)
+app.include_router(stats_router)
+
+@app.get('/health', tags=["health"])
+async def health_check():
+    return {"status":"ok"}

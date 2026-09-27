@@ -1,7 +1,7 @@
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
-from sqlmodel import SQlmodel, Field
+from sqlmodel import SQLModel, Field
 
 # orderStatus (Enum) -> preparing , picked_up, in_trasnsit, delivered
 class Orderstatus(str, Enum):
@@ -11,29 +11,29 @@ class Orderstatus(str, Enum):
     DELIVERED = "delivered"
 
 # Database table for orders
-class Order(SQlmodel, table=True):
+class Order(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     customer_name: str
     delivery_address: str
     items: str
     status: Orderstatus = Field(default=Orderstatus.PREPARING)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.now})
+    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=datetime.now, sa_column_kwargs={"onupdate": datetime.now})
 
 
 # schema for creating an order
-class OrderCreate(SQlmodel):
+class OrderCreate(SQLModel):
     customer_name: str
     delivery_address: str
     items: str 
 
 # schema for updating an order's status
-class OrderUpdateStatus(SQlmodel):
+class OrderUpdateStatus(SQLModel):
     status: Optional[Orderstatus] = None
     delivery_address: Optional[str] = None
 
 # StatusLog
-class StatusLog(SQlmodel):
+class StatusLog(SQLModel):
     order_id: int 
     old_status: str
     new_status: str
