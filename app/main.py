@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import secrets, string
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
@@ -60,3 +61,17 @@ def redirect(short_url: str, session: SessionDep):
     session.refresh(stats)
 
     return RedirectResponse(mapping.original_url, status_code=307)
+=======
+from fastapi import FastAPI
+from routes.query import router as query_router
+
+app = FastAPI(
+    title="RAG API",
+    description="This is RAG API",
+    version="0.1.0"
+
+)
+
+app.include_router(query_router)
+
+>>>>>>> 7e15bf92d8cd98a566358c19114ef1d903062664
