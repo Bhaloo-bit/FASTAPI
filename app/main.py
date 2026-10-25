@@ -9,7 +9,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi .responses import RedirectResponse
 
 from database import create_db_and_tables, SessionDep
-from models import URLMapping, URLCreate, URLResponse, Analytics, AnalyticsResponse
+from e_commerce.app.models import URLMapping, URLCreate, URLResponse, Analytics, AnalyticsResponse
 
 BASE_URL = "http://localhost:8000"
 
